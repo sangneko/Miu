@@ -88,64 +88,51 @@
       color: #888;
     }
 
-    /* Countdown SN */
-    #countdown {
-      position: fixed;
-      bottom: 15px;
-      left: 15px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 12px 18px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      font-size: 14px;
-      color: #444;
-      line-height: 1.4;
-      z-index: 1000;
-    }
-    #countdown strong {
-      display: block;
-      font-size: 16px;
-      color: #e91e63;
-      margin-bottom: 4px;
-    }
+    /* Container chứa 2 thanh */
+#counters {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  flex-wrap: wrap; /* tự xuống hàng nếu màn hình quá nhỏ */
+}
 
-    /* Love counter */
-    #loveCounter {
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 12px 18px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      font-size: 14px;
-      color: #444;
-      line-height: 1.4;
-      text-align: center;
-      z-index: 1000;
-    }
-    #loveCounter strong {
-      display: block;
-      font-size: 16px;
-      color: #e91e63;
-      margin-bottom: 4px;
-    }
+#countdown, #loveCounter {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
+  min-width: 150px;
+  text-align: center;
+}
 
-    /* Mobile responsive */
+#countdown strong, #loveCounter strong {
+  display: block;
+  font-size: 16px;
+  color: #e91e63;
+  margin-bottom: 4px;
+}
+
+/* Mobile responsive */
 @media (max-width: 600px) {
-  header h1 { font-size: 22px; }
-  .card h2 { font-size: 18px; }
-  .card img { height: 160px; }
-  #countdown, #loveCounter { 
-    font-size: 12px; 
-    padding: 10px 14px; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    right: auto;
+  #counters {
+    flex-direction: row;   /* vẫn giữ ngang hàng */
+    justify-content: center;
+    gap: 6px;
   }
-  #countdown { bottom: 70px; }   /* lùi lên trên một chút */
-  #loveCounter { bottom: 15px; } /* nằm ngay dưới */
+  #countdown, #loveCounter {
+    font-size: 12px;
+    padding: 10px 12px;
+    min-width: 120px;
+  }
   #countdown strong, #loveCounter strong { font-size: 14px; }
+
     }
   </style>
 </head>
@@ -199,21 +186,19 @@
     </div>
   </div>
 
-  <!-- Countdown SN -->
+  <!-- Countdown & Love Counter -->
+<div id="counters">
   <div id="countdown">
     <strong>🎂 Đếm ngược SN Miu 09/09/2026</strong>
     <span id="timer">Đang tải...</span>
   </div>
 
-  <!-- Love Counter -->
   <div id="loveCounter">
-    <strong>💖 Ngày yêu 💖</strong>
-    <span id="loveDays">Đang tính...</span>
+    <strong>💖 Ngày yêu nhau</strong>
+    <span id="loveDays">Đang tải...</span>
   </div>
+</div>
 
-  <footer>
-    © 2025 - Miu Gallery | Thiết kế bởi Nguyễn Thái Sang 💖
-  </footer>
 
   <script>
     // Countdown SN
