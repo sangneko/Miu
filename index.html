@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Xem File trong Bucket</title>
+  <title>Xem Ảnh & Video trong Bucket</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { 
@@ -11,63 +11,71 @@
       padding: 20px; 
       background: #f0f4f8; 
       color: #333; 
-      text-align: center;
     }
     h2 { 
+      text-align: center; 
       color: #0066cc; 
       margin-bottom: 20px; 
     }
-    .viewer {
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    .card {
       background: #fff;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      display: inline-block;
-      max-width: 90%;
+      margin-bottom: 30px;
+    }
+    h3 { margin-top: 0; color: #444; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .item {
+      text-align: center;
+      background: #fafafa;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     img, video {
-      max-width: 100%;
-      max-height: 500px;
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 8px;
     }
     video { background: #000; }
-    .controls {
-      margin-top: 15px;
-    }
-    button {
-      background: #0066cc;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 0 10px;
-    }
-    button:hover { background: #004999; }
     .info {
-      margin-top: 12px;
-      font-size: 14px;
+      font-size: 13px;
       color: #555;
+      word-break: break-all;
     }
   </style>
 </head>
 <body>
-  <h2>📑 Xem File trong Bucket</h2>
-  <div class="viewer">
-    <div id="displayArea">⏳ Đang tải...</div>
-    <div class="controls">
-      <button onclick="prevFile()">⬅️ Trước</button>
-      <button onclick="nextFile()">➡️ Sau</button>
+  <div class="container">
+    <h2>📑 Danh sách Ảnh & Video trong Bucket</h2>
+    <button onclick="listFiles()">🔄 Tải lại danh sách</button>
+
+    <div class="card">
+      <h3>🖼 Ảnh</h3>
+      <div class="grid" id="imageList"></div>
     </div>
-    <div class="info" id="fileInfo"></div>
+
+    <div class="card">
+      <h3>🎬 Video</h3>
+      <div class="grid" id="videoList"></div>
+    </div>
   </div>
 
   <!-- AWS SDK -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
   <script>
-    // ⚠️ Thay bằng thông tin của bạn
+    // ⚠️ Thay bằng thông tin bucket của bạn
     const accessKey = "N12TIFK5L059IK15QPO9";
     const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
     const bucket = "miu99207";
@@ -82,61 +90,50 @@
 
     const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
-    let files = [];
-    let currentIndex = 0;
-
+    // Liệt kê và hiển thị file
     function listFiles() {
+      const imageList = document.getElementById("imageList");
+      const videoList = document.getElementById("videoList");
+
+      imageList.innerHTML = "⏳ Đang tải...";
+      videoList.innerHTML = "";
+
       s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
         if (err) {
-          document.getElementById("displayArea").innerHTML = `<span style="color:red">❌ Lỗi: ${err}</span>`;
+          imageList.innerHTML = `<span style="color:red">❌ Lỗi: ${err}</span>`;
         } else {
-          files = data.Contents
-            .filter(obj => /\.(jpg|jpeg|png|gif|webp|mp4|webm|ogg)$/i.test(obj.Key))
-            .map(obj => ({
-              key: obj.Key,
-              url: `https://${bucket}.${endpoint}/${obj.Key}`,
-              date: new Date(obj.LastModified).toLocaleString("vi-VN")
-            }));
-          
-          if (files.length === 0) {
-            document.getElementById("displayArea").innerHTML = "📭 Chưa có ảnh/video nào.";
+          if (!data.Contents || data.Contents.length === 0) {
+            imageList.innerHTML = "📭 Chưa có file nào.";
             return;
           }
 
-          currentIndex = 0;
-          showFile();
+          imageList.innerHTML = "";
+          videoList.innerHTML = "";
+
+          data.Contents.forEach(obj => {
+            const url = `https://${bucket}.${endpoint}/${obj.Key}`;
+            const date = new Date(obj.LastModified).toLocaleString("vi-VN");
+
+            // Tạo khối item
+            const item = document.createElement("div");
+            item.className = "item";
+
+            // Nếu là ảnh
+            if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
+              item.innerHTML = `<img src="${url}" alt="${obj.Key}"><div class="info">📄 ${obj.Key}<br>📅 ${date}</div>`;
+              imageList.appendChild(item);
+            }
+            // Nếu là video
+            else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
+              item.innerHTML = `<video src="${url}" controls></video><div class="info">📄 ${obj.Key}<br>📅 ${date}</div>`;
+              videoList.appendChild(item);
+            }
+          });
         }
       });
     }
 
-    function showFile() {
-      const file = files[currentIndex];
-      const displayArea = document.getElementById("displayArea");
-      const fileInfo = document.getElementById("fileInfo");
-
-      if (!file) return;
-
-      if (/\.(jpg|jpeg|png|gif|webp)$/i.test(file.key)) {
-        displayArea.innerHTML = `<img src="${file.url}" alt="${file.key}">`;
-      } else if (/\.(mp4|webm|ogg)$/i.test(file.key)) {
-        displayArea.innerHTML = `<video src="${file.url}" controls></video>`;
-      }
-
-      fileInfo.innerHTML = `📄 ${file.key}<br>📅 ${file.date}`;
-    }
-
-    function prevFile() {
-      if (files.length === 0) return;
-      currentIndex = (currentIndex - 1 + files.length) % files.length;
-      showFile();
-    }
-
-    function nextFile() {
-      if (files.length === 0) return;
-      currentIndex = (currentIndex + 1) % files.length;
-      showFile();
-    }
-
+    // Load danh sách khi mở trang
     window.onload = listFiles;
   </script>
 </body>
