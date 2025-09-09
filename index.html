@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Danh sách File trong Bucket</title>
+  <title>Xem File trong Bucket</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { 
@@ -18,7 +18,7 @@
       margin-bottom: 20px; 
     }
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
     }
     .card {
@@ -28,21 +28,14 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
-    ul { list-style: none; padding: 0; }
-    li {
-      padding: 15px;
-      margin: 12px 0;
-      background: #f9fbfd;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    h3 { margin-top: 0; color: #444; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
     }
-    li a { color: #0066cc; text-decoration: none; }
-    li a:hover { text-decoration: underline; }
     img, video {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      margin-top: 10px;
+      width: 100%;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
@@ -54,7 +47,12 @@
     <h2>📑 Danh sách File trong bucket</h2>
     <div class="card">
       <button onclick="listFiles()">🔄 Tải lại danh sách</button>
-      <ul id="fileList"></ul>
+
+      <h3>🖼 Ảnh</h3>
+      <div class="grid" id="imageList"></div>
+
+      <h3>🎬 Video</h3>
+      <div class="grid" id="videoList"></div>
     </div>
   </div>
 
@@ -76,35 +74,43 @@
 
     const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
-    // Liệt kê tất cả file trong bucket
+    // Liệt kê và hiển thị file
     function listFiles() {
-      const listEl = document.getElementById("fileList");
-      listEl.innerHTML = "<li>⏳ Đang tải...</li>";
+      const imageList = document.getElementById("imageList");
+      const videoList = document.getElementById("videoList");
+
+      imageList.innerHTML = "⏳ Đang tải...";
+      videoList.innerHTML = "";
 
       s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
         if (err) {
-          listEl.innerHTML = `<li style="color:red">❌ Lỗi: ${err}</li>`;
+          imageList.innerHTML = `<span style="color:red">❌ Lỗi: ${err}</span>`;
+          videoList.innerHTML = "";
         } else {
           if (!data.Contents || data.Contents.length === 0) {
-            listEl.innerHTML = "<li>📭 Chưa có file nào.</li>";
+            imageList.innerHTML = "📭 Chưa có file nào.";
+            videoList.innerHTML = "";
             return;
           }
-          listEl.innerHTML = "";
+          imageList.innerHTML = "";
+          videoList.innerHTML = "";
+
           data.Contents.forEach(obj => {
             const url = `https://${bucket}.${endpoint}/${obj.Key}`;
-            const li = document.createElement("li");
-            li.innerHTML = `📄 <a href="${url}" target="_blank">${obj.Key}</a>`;
-
             // Nếu là ảnh
             if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
-              li.innerHTML += `<img src="${url}" alt="${obj.Key}">`;
+              const img = document.createElement("img");
+              img.src = url;
+              img.alt = obj.Key;
+              imageList.appendChild(img);
             }
             // Nếu là video
             else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
-              li.innerHTML += `<video src="${url}" controls></video>`;
+              const video = document.createElement("video");
+              video.src = url;
+              video.controls = true;
+              videoList.appendChild(video);
             }
-
-            listEl.appendChild(li);
           });
         }
       });
