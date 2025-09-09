@@ -100,35 +100,37 @@
   justify-content: center;
 }
 
-/* Box chung */
-#countdown, #loveCounter {
+#counters {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 1000;
+  white-space: nowrap; /* ép không xuống dòng */
+}
+
+#counters .box {
   background: rgba(255, 255, 255, 0.95);
-  padding: 12px 18px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  font-size: 12px;
   color: #444;
-  line-height: 1.4;
-  flex: 1;              /* auto co giãn để vừa màn hình */
-  min-width: 0;         /* cho phép co nhỏ */
+  min-width: 110px;
   text-align: center;
 }
 
-#countdown strong, #loveCounter strong {
-  display: block;
-  font-size: 16px;
-  color: #e91e63;
-  margin-bottom: 4px;
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  #countdown, #loveCounter {
-    font-size: 11px;     /* chữ nhỏ hơn */
-    padding: 8px 10px;   /* box gọn lại */
+/* Auto scale khi màn hình nhỏ */
+@media (max-width: 400px) {
+  #counters {
+    transform: translateX(-50%) scale(0.85);
   }
-  #countdown strong, #loveCounter strong {
-    font-size: 13px;
+}
+@media (max-width: 340px) {
+  #counters {
+    transform: translateX(-50%) scale(0.75);
   }
     }
   </style>
