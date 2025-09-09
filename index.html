@@ -97,18 +97,20 @@
   display: flex;
   gap: 10px;
   z-index: 1000;
-  flex-wrap: wrap; /* tự xuống hàng nếu màn hình quá nhỏ */
+  justify-content: center;
 }
 
+/* Box chung */
 #countdown, #loveCounter {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   padding: 12px 18px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   font-size: 14px;
   color: #444;
   line-height: 1.4;
-  min-width: 150px;
+  flex: 1;              /* auto co giãn để vừa màn hình */
+  min-width: 0;         /* cho phép co nhỏ */
   text-align: center;
 }
 
@@ -119,20 +121,15 @@
   margin-bottom: 4px;
 }
 
-/* Mobile responsive */
+/* Mobile */
 @media (max-width: 600px) {
-  #counters {
-    flex-direction: row;   /* vẫn giữ ngang hàng */
-    justify-content: center;
-    gap: 6px;
-  }
   #countdown, #loveCounter {
-    font-size: 12px;
-    padding: 10px 12px;
-    min-width: 120px;
+    font-size: 11px;     /* chữ nhỏ hơn */
+    padding: 8px 10px;   /* box gọn lại */
   }
-  #countdown strong, #loveCounter strong { font-size: 14px; }
-
+  #countdown strong, #loveCounter strong {
+    font-size: 13px;
+  }
     }
   </style>
 </head>
