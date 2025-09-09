@@ -2,86 +2,89 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Xem Ảnh & Video trong Bucket</title>
+  <title>Gallery Ảnh & Video</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      margin: 0; 
-      padding: 20px; 
-      background: #f0f4f8; 
-      color: #333; 
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 0; padding: 0; background: #f5f7fb; color: #333; }
+    header {
+      text-align: center; padding: 30px 20px 10px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
-    h2 { 
-      text-align: center; 
-      color: #0066cc; 
-      margin-bottom: 20px; 
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-    }
-    .tabs {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+    header h1 { margin: 0; font-size: 26px; }
+    .container { max-width: 1300px; margin: auto; padding: 20px; }
+    .tabs { display: flex; justify-content: center; margin: 20px 0; gap: 10px; }
     .tab {
-      padding: 10px 20px;
-      margin: 0 5px;
-      border: none;
-      border-radius: 6px;
-      background: #ddd;
-      cursor: pointer;
-      font-weight: bold;
+      padding: 12px 24px; border: none; border-radius: 25px;
+      background: #e0e0e0; cursor: pointer; font-weight: bold; transition: 0.3s;
     }
-    .tab.active {
-      background: #0066cc;
-      color: #fff;
+    .tab:hover { background: #d0d0d0; }
+    .tab.active { background: #0066cc; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+    .reload-btn {
+      display: block; margin: 0 auto 20px; padding: 12px 24px;
+      border: none; border-radius: 8px; background: #28a745; color: #fff;
+      font-weight: bold; cursor: pointer; transition: 0.3s;
     }
+    .reload-btn:hover { background: #1e7e34; }
     .card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
+      background: #fff; padding: 20px; border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 30px;
     }
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 20px;
     }
     .item {
-      text-align: center;
-      background: #fafafa;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      background: #fafafa; border-radius: 12px; padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; cursor: pointer;
     }
+    .item:hover { transform: translateY(-5px); }
     img, video {
-      width: 100%;
-      max-height: 250px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 8px;
+      width: 100%; height: 200px; object-fit: cover;
+      border-radius: 10px; margin-bottom: 8px;
     }
     video { background: #000; }
-    .info {
-      font-size: 13px;
-      color: #555;
-      word-break: break-all;
-    }
+    .info { font-size: 13px; color: #555; text-align: center; }
     .hidden { display: none; }
+
+    /* Slideshow popup */
+    .lightbox {
+      display: none; position: fixed; z-index: 9999; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+      justify-content: center; align-items: center; flex-direction: column;
+    }
+    .lightbox-content {
+      max-width: 90%; max-height: 80%; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .lightbox video, .lightbox img {
+      max-width: 100%; max-height: 80vh; border-radius: 10px;
+    }
+    .lightbox .controls {
+      margin-top: 15px; text-align: center;
+    }
+    .btn {
+      background: rgba(255,255,255,0.2); color: #fff;
+      border: none; padding: 10px 18px; margin: 5px;
+      border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold;
+      transition: 0.3s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.4); }
   </style>
 </head>
 <body>
+  <header>
+    <h1>📂 Thư viện Ảnh & Video</h1>
+    <p>Xem trực tiếp ảnh và video lưu trong bucket</p>
+  </header>
+
   <div class="container">
-    <h2>📑 Danh sách Ảnh & Video trong Bucket</h2>
     <div class="tabs">
       <button class="tab active" onclick="showTab('image')">🖼 Ảnh</button>
       <button class="tab" onclick="showTab('video')">🎬 Video</button>
     </div>
-    <button onclick="listFiles()">🔄 Tải lại danh sách</button>
+
+    <button class="reload-btn" onclick="listFiles()">🔄 Tải lại danh sách</button>
 
     <div id="imageSection" class="card">
       <div class="grid" id="imageList"></div>
@@ -92,10 +95,19 @@
     </div>
   </div>
 
+  <!-- Slideshow lightbox -->
+  <div id="lightbox" class="lightbox">
+    <div class="lightbox-content" id="lightboxContent"></div>
+    <div class="controls">
+      <button class="btn" onclick="prevItem()">⬅ Trước</button>
+      <button class="btn" onclick="closeLightbox()">✖ Đóng</button>
+      <button class="btn" onclick="nextItem()">➡ Sau</button>
+    </div>
+  </div>
+
   <!-- AWS SDK -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1420.0/aws-sdk.min.js"></script>
   <script>
-    // ⚠️ Thay bằng thông tin bucket của bạn
     const accessKey = "N12TIFK5L059IK15QPO9";
     const secretKey = "xqFsKI7fBDrlX6bL2mkDmrAuzTUMrneJbcOUbrTe";
     const bucket = "miu99207";
@@ -110,43 +122,51 @@
 
     const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
+    let items = [];  // lưu danh sách {type, url}
+    let currentIndex = 0;
+
     function listFiles() {
       const imageList = document.getElementById("imageList");
       const videoList = document.getElementById("videoList");
 
-      imageList.innerHTML = "⏳ Đang tải...";
-      videoList.innerHTML = "";
+      imageList.innerHTML = "<p>⏳ Đang tải ảnh...</p>";
+      videoList.innerHTML = "<p>⏳ Đang tải video...</p>";
 
       s3.listObjectsV2({ Bucket: bucket }, (err, data) => {
         if (err) {
           imageList.innerHTML = `<span style="color:red">❌ Lỗi: ${err}</span>`;
-        } else {
-          if (!data.Contents || data.Contents.length === 0) {
-            imageList.innerHTML = "📭 Chưa có file nào.";
-            return;
-          }
-
-          imageList.innerHTML = "";
-          videoList.innerHTML = "";
-
-          data.Contents.forEach(obj => {
-            const url = `https://${bucket}.${endpoint}/${obj.Key}`;
-            const date = new Date(obj.LastModified).toLocaleString("vi-VN");
-
-            const item = document.createElement("div");
-            item.className = "item";
-
-            if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
-              item.innerHTML = `<img src="${url}" alt="${obj.Key}">
-                                <div class="info">📄 ${obj.Key}<br>📅 ${date}</div>`;
-              imageList.appendChild(item);
-            } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
-              item.innerHTML = `<video src="${url}" controls></video>
-                                <div class="info">📄 ${obj.Key}<br>📅 ${date}</div>`;
-              videoList.appendChild(item);
-            }
-          });
+          return;
         }
+
+        imageList.innerHTML = "";
+        videoList.innerHTML = "";
+        items = [];
+
+        if (!data.Contents || data.Contents.length === 0) {
+          imageList.innerHTML = "📭 Chưa có file nào.";
+          return;
+        }
+
+        data.Contents.forEach((obj, i) => {
+          const url = `https://${bucket}.${endpoint}/${obj.Key}`;
+          const date = new Date(obj.LastModified).toLocaleString("vi-VN");
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "item";
+
+          if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
+            itemDiv.innerHTML = `<img src="${url}" alt="${obj.Key}">
+                                 <div class="info">📅 ${date}</div>`;
+            itemDiv.onclick = () => openLightbox(i);
+            imageList.appendChild(itemDiv);
+            items.push({ type: "image", url });
+          } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
+            itemDiv.innerHTML = `<video src="${url}"></video>
+                                 <div class="info">📅 ${date}</div>`;
+            itemDiv.onclick = () => openLightbox(i);
+            videoList.appendChild(itemDiv);
+            items.push({ type: "video", url });
+          }
+        });
       });
     }
 
@@ -166,6 +186,43 @@
       tabs.forEach(t => t.classList.remove("active"));
       document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add("active");
     }
+
+    // Slideshow
+    function openLightbox(index) {
+      currentIndex = index;
+      const lightbox = document.getElementById("lightbox");
+      const content = document.getElementById("lightboxContent");
+      const item = items[index];
+
+      content.innerHTML = item.type === "image"
+        ? `<img src="${item.url}">`
+        : `<video src="${item.url}" controls autoplay></video>`;
+
+      lightbox.style.display = "flex";
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+
+    function nextItem() {
+      currentIndex = (currentIndex + 1) % items.length;
+      openLightbox(currentIndex);
+    }
+
+    function prevItem() {
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      openLightbox(currentIndex);
+    }
+
+    // Dùng phím mũi tên
+    document.addEventListener("keydown", e => {
+      if (document.getElementById("lightbox").style.display === "flex") {
+        if (e.key === "ArrowRight") nextItem();
+        if (e.key === "ArrowLeft") prevItem();
+        if (e.key === "Escape") closeLightbox();
+      }
+    });
 
     window.onload = listFiles;
   </script>
