@@ -195,17 +195,15 @@
 
 
   <script>
-    // Countdown SN
-    function updateCountdown() {
-      const target = new Date("2026-09-09T00:00:00").getTime();
-      const now = new Date().getTime();
-      const diff = target - now;
+  function updateCountdown() {
+    // ---- Đếm ngược sinh nhật ----
+    const target = new Date("2026-09-09T00:00:00").getTime();
+    const now = new Date().getTime();
+    const diff = target - now;
 
-      if (diff <= 0) {
-        document.getElementById("timer").innerHTML = "🎉 Đã tới sinh nhật Miu!";
-        return;
-      }
-
+    if (diff <= 0) {
+      document.getElementById("timer").innerHTML = "🎉 Đã tới sinh nhật Miu!";
+    } else {
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -215,21 +213,22 @@
         `${days} ngày ${hours} giờ ${mins} phút ${secs} giây`;
     }
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    // ---- Tính ngày yêu ----
+    const loveStart = new Date("2024-09-16T00:00:00").getTime();
+    const loveDiff = now - loveStart;
+    const loveDays = Math.floor(loveDiff / (1000 * 60 * 60 * 24));
 
-    // Love counter
-    function updateLoveDays() {
-      const start = new Date("2024-09-16T00:00:00").getTime();
-      const now = new Date().getTime();
-      const diff = now - start;
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      document.getElementById("loveDays").innerHTML = `${days} ngày bên nhau 🥰`;
+    if (loveDays >= 0) {
+      document.getElementById("love").innerHTML = `${loveDays} ngày bên nhau 🥰`;
+    } else {
+      document.getElementById("love").innerHTML = "Chưa tới ngày yêu 💖";
     }
+  }
 
-    updateLoveDays();
-    setInterval(updateLoveDays, 1000 * 60 * 60); // Cập nhật mỗi giờ
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
+
   </script>
 </body>
 </html>
