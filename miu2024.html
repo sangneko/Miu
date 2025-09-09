@@ -2,29 +2,45 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Miu 2024 (T9- T12)</title>
+  <title>Miu 2024 (T9 - T12)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body { font-family: "Segoe UI", Arial, sans-serif; margin: 0; padding: 0; background: #f5f7fb; color: #333; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f5f7fb; color: #333;
+    }
     header {
-      text-align: center; padding: 30px 20px 10px;
-      background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff;
+      text-align: center;
+      padding: 30px 20px 10px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     header h1 { margin: 0; font-size: 26px; }
     .container { max-width: 1300px; margin: auto; padding: 20px; }
-    .tabs { display: flex; justify-content: center; margin: 20px 0; gap: 10px; }
+    .tabs {
+      display: flex; justify-content: center;
+      margin: 20px 0; gap: 10px;
+    }
     .tab {
       padding: 12px 24px; border: none; border-radius: 25px;
-      background: #e0e0e0; cursor: pointer; font-weight: bold; transition: 0.3s;
+      background: #e0e0e0; cursor: pointer;
+      font-weight: bold; transition: 0.3s;
     }
     .tab:hover { background: #d0d0d0; }
-    .tab.active { background: #0066cc; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+    .tab.active {
+      background: #0066cc; color: #fff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
     .reload-btn {
-      display: block; margin: 0 auto 20px; padding: 12px 24px;
-      border: none; border-radius: 8px; background: #28a745; color: #fff;
-      font-weight: bold; cursor: pointer; transition: 0.3s;
+      display: block; margin: 0 auto 20px;
+      padding: 12px 24px;
+      border: none; border-radius: 8px;
+      background: #28a745; color: #fff;
+      font-weight: bold; cursor: pointer;
+      transition: 0.3s;
     }
     .reload-btn:hover { background: #1e7e34; }
     .card {
@@ -37,16 +53,17 @@
     }
     .item {
       background: #fafafa; border-radius: 12px; padding: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s; cursor: pointer;
     }
     .item:hover { transform: translateY(-5px); }
     img, video {
-  max-width: 100%;
-  height: auto;         /* giữ tỉ lệ gốc */
-  object-fit: contain;  /* không cắt ảnh */
-  border-radius: 10px;
-  margin-bottom: 8px;
-}
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
     video { background: #000; }
     .info { font-size: 13px; color: #555; text-align: center; }
     .hidden { display: none; }
@@ -58,10 +75,13 @@
       justify-content: center; align-items: center; flex-direction: column;
     }
     .lightbox-content {
-      max-width: 90%; max-height: 80%; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      max-width: 90%; max-height: 80%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
     .lightbox video, .lightbox img {
-      max-width: 100%; max-height: 80vh; border-radius: 10px;
+      max-width: 100%; max-height: 80vh;
+      border-radius: 10px;
     }
     .lightbox .controls {
       margin-top: 15px; text-align: center;
@@ -69,8 +89,8 @@
     .btn {
       background: rgba(255,255,255,0.2); color: #fff;
       border: none; padding: 10px 18px; margin: 5px;
-      border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold;
-      transition: 0.3s;
+      border-radius: 6px; cursor: pointer;
+      font-size: 16px; font-weight: bold; transition: 0.3s;
     }
     .btn:hover { background: rgba(255,255,255,0.4); }
   </style>
@@ -78,7 +98,7 @@
 <body>
   <header>
     <h1>📂 Thư viện Ảnh & Video</h1>
-    <p>Xem trực tiếp ảnh và video Miu 2024 (T9- T12)</p>
+    <p>Xem trực tiếp ảnh và video Miu 2024 (T9 - T12)</p>
   </header>
 
   <div class="container">
@@ -125,7 +145,7 @@
 
     const s3 = new AWS.S3({ endpoint: new AWS.Endpoint(endpoint) });
 
-    let items = [];  // lưu danh sách {type, url}
+    let items = [];  // {type, url}
     let currentIndex = 0;
 
     function listFiles() {
@@ -151,20 +171,22 @@
         }
 
         data.Contents.forEach((obj, i) => {
-          const url = `https://${bucket}.${endpoint}/${obj.Key}`;
+          const url = `https://${endpoint}/${bucket}/${obj.Key}`; // path-style URL
           const date = new Date(obj.LastModified).toLocaleString("vi-VN");
           const itemDiv = document.createElement("div");
           itemDiv.className = "item";
 
           if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
-            itemDiv.innerHTML = `<img src="${url}" alt="${obj.Key}">
-                                 <div class="info">📅 ${date}</div>`;
+            itemDiv.innerHTML = `
+              <img src="${url}" alt="${obj.Key}">
+              <div class="info">📅 ${date}</div>`;
             itemDiv.onclick = () => openLightbox(i);
             imageList.appendChild(itemDiv);
             items.push({ type: "image", url });
           } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
-            itemDiv.innerHTML = `<video src="${url}"></video>
-                                 <div class="info">📅 ${date}</div>`;
+            itemDiv.innerHTML = `
+              <video src="${url}" controls muted></video>
+              <div class="info">📅 ${date}</div>`;
             itemDiv.onclick = () => openLightbox(i);
             videoList.appendChild(itemDiv);
             items.push({ type: "video", url });
@@ -190,7 +212,6 @@
       document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add("active");
     }
 
-    // Slideshow
     function openLightbox(index) {
       currentIndex = index;
       const lightbox = document.getElementById("lightbox");
@@ -218,7 +239,6 @@
       openLightbox(currentIndex);
     }
 
-    // Dùng phím mũi tên
     document.addEventListener("keydown", e => {
       if (document.getElementById("lightbox").style.display === "flex") {
         if (e.key === "ArrowRight") nextItem();
