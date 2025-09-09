@@ -3,7 +3,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Miu 20262026 </title>
+  <title>Miu 2026 </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -160,20 +160,34 @@
           const itemDiv = document.createElement("div");
           itemDiv.className = "item";
 
+          //if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
+            //itemDiv.innerHTML = `<img src="${url}" alt="${obj.Key}">
+                                // <div class="info">📅 ${date}</div>`;
+           // let idx = imageItems.length;
+           // itemDiv.onclick = () => openLightbox(idx, "image");
+           // imageList.appendChild(itemDiv);
+           // imageItems.push({ type: "image", url });
+       //   } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
+         //   itemDiv.innerHTML = `<video src="${url}"></video>
+           //                      <div class="info">📅 ${date}</div>`;
+         //   let idx = videoItems.length;
+          //  itemDiv.onclick = () => openLightbox(idx, "video");
+          //  videoList.appendChild(itemDiv);
+         //   videoItems.push({ type: "video", url });
+
           if (/\.(jpg|jpeg|png|gif|webp)$/i.test(obj.Key)) {
-            itemDiv.innerHTML = `<img src="${url}" alt="${obj.Key}">
-                                 <div class="info">📅 ${date}</div>`;
-            let idx = imageItems.length;
-            itemDiv.onclick = () => openLightbox(idx, "image");
-            imageList.appendChild(itemDiv);
-            imageItems.push({ type: "image", url });
-          } else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
-            itemDiv.innerHTML = `<video src="${url}"></video>
-                                 <div class="info">📅 ${date}</div>`;
-            let idx = videoItems.length;
-            itemDiv.onclick = () => openLightbox(idx, "video");
-            videoList.appendChild(itemDiv);
-            videoItems.push({ type: "video", url });
+  itemDiv.innerHTML = `<img src="${url}" alt="${obj.Key}">
+                       <div class="info">📅 ${date}</div>`;
+  itemDiv.onclick = () => alert("📅 Hẹn vào 2026!");
+  imageList.appendChild(itemDiv);
+  imageItems.push({ type: "image", url });
+} else if (/\.(mp4|webm|ogg)$/i.test(obj.Key)) {
+  itemDiv.innerHTML = `<video src="${url}"></video>
+                       <div class="info">📅 ${date}</div>`;
+  itemDiv.onclick = () => alert("📅 Hẹn vào 2026!");
+  videoList.appendChild(itemDiv);
+  videoItems.push({ type: "video", url });
+
           }
         });
       });
