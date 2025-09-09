@@ -88,50 +88,40 @@
       color: #888;
     }
 
-    /* Container chứa 2 thanh */
-#counters {
-  position: fixed;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
+    #counters {
   display: flex;
-  gap: 10px;
-  z-index: 1000;
   justify-content: center;
-}
-
-#counters {
-  position: fixed;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 1000;
-  white-space: nowrap; /* ép không xuống dòng */
+  gap: 15px;
+  margin: 30px auto 15px; /* cách footer 1 chút */
+  flex-wrap: wrap; /* nếu quá nhỏ thì xuống hàng */
 }
 
 #counters .box {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 6px 10px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  font-size: 12px;
+  background: none; /* bỏ khung trắng */
+  padding: 0;
+  font-size: 14px;
   color: #444;
-  min-width: 110px;
   text-align: center;
+  min-width: 120px;
 }
 
-/* Auto scale khi màn hình nhỏ */
-@media (max-width: 400px) {
+#counters strong {
+  display: block;
+  font-size: 15px;
+  color: #e91e63;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 500px) {
   #counters {
-    transform: translateX(-50%) scale(0.85);
+    font-size: 12px;
+    gap: 8px;
+  }
+  #counters strong {
+    font-size: 13px;
   }
 }
-@media (max-width: 340px) {
-  #counters {
-    transform: translateX(-50%) scale(0.75);
-  }
+
     }
   </style>
 </head>
@@ -185,22 +175,22 @@
     </div>
   </div>
 
-  <!-- 2 thanh đếm -->
+    <!-- Countdown đặt cuối trang -->
   <div id="counters">
-    <div id="countdown">
+    <div class="box">
       <strong>🎂 SN Miu 09/09/2026</strong>
       <span id="timer">Đang tải...</span>
     </div>
-
-    <div id="loveCounter">
+    <div class="box">
       <strong>💖 Ngày yêu</strong>
-      <span id="loveDays">Đang tải...</span>
+      <span id="love">Đang tải...</span>
     </div>
   </div>
 
   <footer>
     © 2025 - Miu Gallery | Thiết kế bởi Nguyễn Thái Sang 💖
   </footer>
+
 
 
 
