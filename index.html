@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Trang Chính lưu trữ ảnh Miu </title>
+  <title>Trang Chính lưu trữ ảnh Miu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -24,15 +24,15 @@
     }
     header h1 {
       margin: 0;
-      font-size: 26px;
+      font-size: 28px;
     }
     header p {
       margin-top: 8px;
-      font-size: 14px;
+      font-size: 15px;
     }
     .container {
-      max-width: 1000px;
-      margin: 30px auto;
+      max-width: 1100px;
+      margin: 40px auto;
       padding: 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -88,11 +88,34 @@
       color: #888;
     }
 
+    /* Countdown box */
+    #countdown {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 12px 18px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-size: 14px;
+      color: #444;
+      line-height: 1.4;
+      z-index: 1000;
+    }
+    #countdown strong {
+      display: block;
+      font-size: 16px;
+      color: #e91e63;
+      margin-bottom: 4px;
+    }
+
     /* Mobile responsive */
     @media (max-width: 600px) {
       header h1 { font-size: 22px; }
       .card h2 { font-size: 18px; }
       .card img { height: 160px; }
+      #countdown { font-size: 12px; padding: 10px 14px; }
+      #countdown strong { font-size: 14px; }
     }
   </style>
 </head>
@@ -103,7 +126,6 @@
   </header>
 
   <div class="container">
-    <!-- Thẻ sang miu.html -->
     <div class="card">
       <img src="https://s3.cloudfly.vn/miu2024/IMG_4546.JPG" alt="Miu Gallery">
       <h2>📂 Miu 2025</h2>
@@ -114,30 +136,57 @@
     <div class="card">
       <img src="https://s3.cloudfly.vn/day18/0808fc7eb877482ccded81b656c1413f.jpeg" alt="Miu Gallery">
       <h2>📂 Miu SN 2025</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập Miu.</p>
+      <p>Xem toàn bộ ảnh và video trong bộ sưu tập sinh nhật.</p>
       <a href="birthday18.html">Truy cập</a>
     </div>
-  </div>
-    
+
     <div class="card">
       <img src="https://s3.cloudfly.vn/miutet2025/IMG_7111.JPG" alt="Miu Gallery">
       <h2>📂 Miu Tết 2025</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập Miu.</p>
+      <p>Xem toàn bộ ảnh và video trong bộ sưu tập Tết.</p>
       <a href="miutet2025.html">Truy cập</a>
     </div>
-  </div>
 
-    <!-- Thẻ sang sang.html -->
     <div class="card">
       <img src="https://miu99207.s3.cloudfly.vn/sang-thumb.jpg" alt="Miu Gallery">
       <h2>📂 Miu 2024</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập Miu.</p>
+      <p>Xem toàn bộ ảnh và video trong bộ sưu tập năm 2024.</p>
       <a href="miu2024.html">Truy cập</a>
     </div>
+  </div>
+
+  <!-- Countdown -->
+  <div id="countdown">
+    <strong>🎂 Đếm ngược SN Miu 09/09/2026</strong>
+    <span id="timer">Đang tải...</span>
   </div>
 
   <footer>
     © 2025 - Miu Gallery | Thiết kế bởi Nguyễn Thái Sang 💖
   </footer>
+
+  <script>
+    function updateCountdown() {
+      const target = new Date("2026-09-09T00:00:00").getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById("timer").innerHTML = "🎉 Đã tới sinh nhật Miu!";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerHTML =
+        `${days} ngày ${hours} giờ ${mins} phút ${secs} giây`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
 </body>
 </html>
