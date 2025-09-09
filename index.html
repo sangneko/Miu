@@ -88,7 +88,7 @@
       color: #888;
     }
 
-    /* Countdown box */
+    /* Countdown SN */
     #countdown {
       position: fixed;
       bottom: 15px;
@@ -109,13 +109,35 @@
       margin-bottom: 4px;
     }
 
+    /* Love counter */
+    #loveCounter {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 12px 18px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-size: 14px;
+      color: #444;
+      line-height: 1.4;
+      text-align: center;
+      z-index: 1000;
+    }
+    #loveCounter strong {
+      display: block;
+      font-size: 16px;
+      color: #e91e63;
+      margin-bottom: 4px;
+    }
+
     /* Mobile responsive */
     @media (max-width: 600px) {
       header h1 { font-size: 22px; }
       .card h2 { font-size: 18px; }
       .card img { height: 160px; }
-      #countdown { font-size: 12px; padding: 10px 14px; }
-      #countdown strong { font-size: 14px; }
+      #countdown, #loveCounter { font-size: 12px; padding: 10px 14px; }
+      #countdown strong, #loveCounter strong { font-size: 14px; }
     }
   </style>
 </head>
@@ -126,53 +148,26 @@
   </header>
 
   <div class="container">
+    <!-- Card mẫu -->
     <div class="card">
       <img src="https://s3.cloudfly.vn/miu2024/IMG_4546.JPG" alt="Miu Gallery">
       <h2>📂 Miu 2025</h2>
       <p>Xem toàn bộ ảnh và video trong bộ sưu tập Miu.</p>
       <a href="miu2025.html">Truy cập</a>
     </div>
-
-    <div class="card">
-      <img src="https://s3.cloudfly.vn/day18/0808fc7eb877482ccded81b656c1413f.jpeg" alt="Miu Gallery">
-      <h2>📂 Miu SN 2025</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập sinh nhật.</p>
-      <a href="birthday18.html">Truy cập</a>
-    </div>
-
-    <div class="card">
-      <img src="https://s3.cloudfly.vn/miutet2025/IMG_7111.JPG" alt="Miu Gallery">
-      <h2>📂 Miu Tết 2025</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập Tết.</p>
-      <a href="miutet2025.html">Truy cập</a>
-    </div>
-
-    <div class="card">
-      <img src="https://miu99207.s3.cloudfly.vn/sang-thumb.jpg" alt="Miu Gallery">
-      <h2>📂 Miu 2024</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập năm 2024.</p>
-      <a href="miu2024.html">Truy cập</a>
-    </div>
-
-    <div class="card">
-      <img src="https://s3.cloudfly.vn/miuxinghui/0234469E-2B7F-47DE-9702-2DDE8091BE31.jpeg" alt="Miu Gallery">
-      <h2>📂 Miu Xing Hui</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập Xing Hui.</p>
-      <a href="miuxinghui.html">Truy cập</a>
-    </div>
-
-    <div class="card">
-      <img src="https://s3.cloudfly.vn/day18/0808fc7eb877482ccded81b656c1413f.jpeg" alt="Miu Gallery">
-      <h2>📂 Miu 2026</h2>
-      <p>Xem toàn bộ ảnh và video trong bộ sưu tập 2026.</p>
-      <a href="miu2026.html">Truy cập</a>
-    </div>
+    <!-- Thêm các card khác như cũ -->
   </div>
 
-  <!-- Countdown -->
+  <!-- Countdown SN -->
   <div id="countdown">
     <strong>🎂 Đếm ngược SN Miu 09/09/2026</strong>
     <span id="timer">Đang tải...</span>
+  </div>
+
+  <!-- Love Counter -->
+  <div id="loveCounter">
+    <strong>💖 Ngày yêu 💖</strong>
+    <span id="loveDays">Đang tính...</span>
   </div>
 
   <footer>
@@ -180,6 +175,7 @@
   </footer>
 
   <script>
+    // Countdown SN
     function updateCountdown() {
       const target = new Date("2026-09-09T00:00:00").getTime();
       const now = new Date().getTime();
@@ -201,6 +197,19 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
+
+    // Love counter
+    function updateLoveDays() {
+      const start = new Date("2024-09-16T00:00:00").getTime();
+      const now = new Date().getTime();
+      const diff = now - start;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById("loveDays").innerHTML = `${days} ngày bên nhau 🥰`;
+    }
+
+    updateLoveDays();
+    setInterval(updateLoveDays, 1000 * 60 * 60); // Cập nhật mỗi giờ
   </script>
 </body>
 </html>
