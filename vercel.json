@@ -1,10 +1,12 @@
 {
   "rewrites": [
-    { "source": "/miu2024", "destination": "/miu2024.html" },
-    { "source": "/miu2025", "destination": "/miu2025.html" },
-    { "source": "/miu2026", "destination": "/miu2026.html" },
-    { "source": "/miutet2025", "destination": "/miutet2025.html" },
-    { "source": "/miuxinghui", "destination": "/miuxinghui.html" },
-    { "source": "/birthday18", "destination": "/birthday18.html" }
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1.html"
+    }
   ]
 }
